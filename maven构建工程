@@ -1,0 +1,35 @@
+  今天是学习dubbo的第三天。
+  因为dubbo想了解hessian协议，为了搭建一个webapp运行hessian demo，
+又去了解maven命令创建web项目，想到平时开发应用，一般会划分多个子应用模块，这种场景maven又是如何创建的呢?
+
+action1. 创建父应用：
+=========================================
+mvn archetype:create \
+-DgroupId=com.hessian.app \
+-DartifactId=test-b2c
+action2. 编辑test-b2c项目的pom.xml文件，修改：
+==============================================
+<packaging>jar</packaging>
+改为
+<packaging>pom</packaging>
+action3. 在test-b2c文件夹内，继续创建子应用工程：
+=========================================
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-biz-core
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-biz-user
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-biz-item
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-biz-order
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-biz-dao
+mvn archetype:create -DgroupId=com.hessian.app -DartifactId=test-b2c-web -DarchetypeArtifactId=maven-archetype-webapp
+最后一项是创建的webapp。
+========================================
+action4.设计core被item、order、user调用，需要在item、order、user对应工程pom.xml中配置依赖：
+<dependency>
+    <groupId>com.mycompany.app</groupId>
+    <artifactId>test-b2c-biz-core</artifactId>
+    <version>${project.version}</version>
+</dependency>
+=========================================
+action5. 导入eclipse工程之前需要让eclipse识别：
+mvn eclipse:eclipse
+=========================================
+
